@@ -26,6 +26,33 @@
   </head>
   <body>
     {% include 'navbar.html' %}
+	
+	{% with messages = get_flashed_messages(with_categories=true) %} 
+      {% if messages %}
+         {% for category, message in messages %}
+            {% if category == "message" %}
+              {% set cls = "alert bg-success alert-dismissible" %}
+            {% elif category == "error" %}
+              {% set cls = "alert bg-danger alert-dismissible" %}
+            {% endif %}
+            <div class="{{ cls }}">
+              <button type="button" class="btn-close" data-dismiss="alert"></button>
+			  <script>
+					document.addEventListener('DOMContentLoaded', function() {
+					  var closeButtons = document.querySelectorAll('.btn-close');
+					  closeButtons.forEach(function(button) {
+						button.addEventListener('click', function() {
+						  this.closest('.alert').remove();
+						});
+					  });
+					});
+			</script>
+
+              {{ message }}
+            </div>
+         {% endfor %}
+      {% endif %}
+    {% endwith %}
 
     <div id="content">
       {% block content %}{% endblock %}
