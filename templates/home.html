@@ -7,6 +7,17 @@
 {% block content %}
 
 
+<p>money: {{chips}}</p>
+<div class="row"> <!--bottom row with chips not in play -->
+	<div class="col-sm-4">
+		<form action="/" method="post">
+			<div class="form-check">
+				<button type="submit" value="1" name="AddChips"class="btn btn-outline-dark btn-lg">Get more Chips</button>
+			</div>
+		</form>
+	</div>
+</div>
+  
   
    <p>{{ held }}</p>
     <p>{{ total_value }}</p>
