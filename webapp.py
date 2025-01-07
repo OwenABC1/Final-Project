@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for, session, request, jsonify, render_template, flash
 from markupsafe import Markup
-from flask_apscheduler import APScheduler
-from apscheduler.schedulers.background import BackgroundScheduler
+#from flask_apscheduler import APScheduler
+#from apscheduler.schedulers.background import BackgroundScheduler
 from flask_oauthlib.client import OAuth
 from bson.objectid import ObjectId
 
@@ -53,9 +53,15 @@ except Exception as e:
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}
 
-@app.route('/')
+@app.route('/', methods=["GET","POST"])
 def home():
-    return render_template('home.html')
+    if 'chips' not in session:
+        session['chips'] = 0
+    if "AddChips" in request.form:
+        session['chips'] = session['chips'] + 1 
+        print("chips: "+ str(session['chips']))
+    #print("chips: "+ str(chips))
+    return render_template('home.html',chips=session['chips'])
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
