@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for, session, request, jsonify, render_template, flash
 from markupsafe import Markup
-from flask_apscheduler import APScheduler
-from apscheduler.schedulers.background import BackgroundScheduler
+#from flask_apscheduler import APScheduler
+#from apscheduler.schedulers.background import BackgroundScheduler
 from flask_oauthlib.client import OAuth
 from bson.objectid import ObjectId
 
@@ -61,8 +61,17 @@ def inject_logged_in():
     
 
 
-@app.route('/')
+@app.route('/', methods=["GET","POST"])
 def home():
+
+    if 'chips' not in session:
+        session['chips'] = 0
+    if "AddChips" in request.form:
+        session['chips'] = session['chips'] + 1 
+        print("chips: "+ str(session['chips']))
+    #print("chips: "+ str(chips))
+    
+
     deck = pydealer.Deck()
     deck.shuffle()
     hand = pydealer.Stack()
@@ -85,9 +94,7 @@ def home():
             card_value = 11
     
     app.logger.info(f"Total value of cards in hand: {total}")
-    return render_template('home.html', held=dealt, total_value=total)
-
-
+    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'])
 
 
 #redirect to GitHub's OAuth page and confirm callback URL
