@@ -10,11 +10,14 @@ import os
 import time
 import pymongo
 import sys
+import pydealer
+from pydealer import Card, Deck, Stack
+
  
 app = Flask(__name__)
 
 app.debug = False #Change this to False for production
-#os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #Remove once done debugging
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #Remove once done debugging
 
 app.secret_key = os.environ['SECRET_KEY'] #used to sign session cookies
 oauth = OAuth(app)
@@ -37,7 +40,7 @@ github = oauth.remote_app(
 url = os.environ["MONGO_CONNECTION_STRING"]
 client = pymongo.MongoClient(url)
 db = client[os.environ["MONGO_DBNAME"]]
-collection = db['posts'] #TODO: put the name of the collection here
+collection = db['FinalProject'] #TODO: put the name of the collection here
 
 # Send a ping to confirm a successful connection
 try:
@@ -49,24 +52,55 @@ except Exception as e:
 #context processors run before templates are rendered and add variable(s) to the template's context
 #context processors must return a dictionary 
 #this context processor adds the variable logged_in to the conext for all templates
+
+
+
 @app.context_processor
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}
+    
+
 
 @app.route('/', methods=["GET","POST"])
 def home():
+
     if 'chips' not in session:
         session['chips'] = 0
     if "AddChips" in request.form:
         session['chips'] = session['chips'] + 1 
         print("chips: "+ str(session['chips']))
     #print("chips: "+ str(chips))
-    return render_template('home.html',chips=session['chips'])
+    
+
+    deck = pydealer.Deck()
+    deck.shuffle()
+    hand = pydealer.Stack()
+    dealt = deck.deal(2)
+    hand.add(dealt)
+    
+    total = 0
+    for card in hand:
+        if card.value.isdigit():
+            card_value = int(card.value)
+        elif card.value in ['Jack', 'Queen', 'King']:
+            card_value = 10
+        elif card.value == 'Ace':
+            card_value = 11  # You might want to handle Ace as 1 or 11 based on your game rules
+        else:
+            card_value = 0  # Default case, should not happen with standard cards
+        total += card_value
+    for card in hand:
+        if total > 21 and card_value == 'Ace':
+            card_value = 11
+    
+    app.logger.info(f"Total value of cards in hand: {total}")
+    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'])
+
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
 def login():   
-    return github.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
+    return github.authorize(callback=url_for('authorized', _external=True, _scheme='http')) #callback URL must match the pre-configured callback URL
 
 @app.route('/logout')
 def logout():
@@ -84,12 +118,12 @@ def authorized():
         try:
             session['github_token'] = (resp['access_token'], '') #save the token to prove that the user logged in
             session['user_data']=github.get('user').data
-            message = 'You were successfully logged in as ' + session['user_data']['login'] + '.'
+            flash('You were successfully logged in as ' + session['user_data']['login'] + '.')
         except Exception as inst:
             session.clear()
             print(inst)
-            message = 'Unable to login, please try again.', 'error'
-    return render_template('message.html', message=message)
+            flash('Unable to login, please try again.', 'error')
+    return redirect('/')
 
 
 @app.route('/page1')
