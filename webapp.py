@@ -63,12 +63,27 @@ def inject_logged_in():
 
 @app.route('/', methods=["GET","POST"])
 def home():
+    
+    
 
+    
+    
+    
     if 'chips' not in session:
         session['chips'] = 0
     if "AddChips" in request.form:
         session['chips'] = session['chips'] + 1 
         print("chips: "+ str(session['chips']))
+    #print("chips: "+ str(chips))
+    
+    
+    if 'bet' not in session:
+        session['bet'] = 0
+    if "BetChips" in request.form:
+        session['bet'] = session['bet'] + 1 
+        session['chips'] = session['chips'] - 1 
+        print("chips: "+ str(session['chips']))
+        print("bet: "+ str(session['bet']))
     #print("chips: "+ str(chips))
     
 
@@ -94,7 +109,7 @@ def home():
             card_value = 11
     
     app.logger.info(f"Total value of cards in hand: {total}")
-    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'])
+    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'], bet=session['bet'])
 
 
 #redirect to GitHub's OAuth page and confirm callback URL
