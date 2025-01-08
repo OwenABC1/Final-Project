@@ -28,8 +28,8 @@
 	</div>
 </div>
 
-
-<div class="row"> <!--row with get more chips button-->
+<!--old get chips button 
+<div class="row">
 	<div class="col-sm-4">
 		<form action="/" method="post">
 			<div class="form-check">
@@ -39,11 +39,48 @@
 		</form>
 	</div>
 </div>
-  
+ -->
   
    <p>{{ held }}</p>
     <p>{{ total_value }}</p>
 
+<footer class="footer p-5">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid">
+			<button name="hit" class="jit btn btn-outline-dark btn-lg">hit</button>
+			</div>
+			<div class="col-sm-6 d-grid">
+			<button name="" class="jit btn btn-outline-dark btn-lg">bet 50</button>
+			</div>
+		</div>
+	</div>	
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid">
+			<button name="hold" class="btn btn-outline-dark btn-lg">hold</button>
+			</div>
+			<div class="col-sm-6 d-grid">
+			<button name="bet10" class="btn btn-outline-dark btn-lg">bet 100</button>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid"> <!-- get more coins -->
+				<form action="/" method="post">
+					<div class="form-check">
+						<button type="submit" value="1" name="AddChips"class="btn btn-outline-dark btn-lg">sell evander's scalp
+						for coin</button>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-6 d-grid">
+			<button name="allin" class="btn btn-outline-dark btn-lg">all in</button>
+			</div>
+		</div>
+	</div>
+</footer>
 
 
 {% endblock %}
