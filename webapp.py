@@ -66,7 +66,7 @@ def home():
     deck = pydealer.Deck()
     deck.shuffle()
     hand = pydealer.Stack()
-    dealt = deck.deal(2)
+    dealt = deck.deal(1)
     hand.add(dealt)
     
     total = 0
