@@ -15,9 +15,10 @@
 
 <p>money: {{chips}}</p>
 
-<div class="row"> <!--row with bet this round button-->
+<!--
+<div class="row"> <!--row with bet this round button
 	<div class="col-sm-4">
-		<!--<img src="static/Chip(val1).png" class="rounded" alt="Chip Val 1"> -->
+		<!--<img src="static/Chip(val1).png" class="rounded" alt="Chip Val 1"> 
 		<form action="/" method="post">
 			<div class="form-check">
 				<button type="submit" value="1" name="BetChips"class="btn btn-outline-dark btn-lg">Bet</button>
@@ -27,18 +28,21 @@
 	<div class="col-sm-8">
 	</div>
 </div>
+-->
 
 
-<div class="row"> <!--row with get more chips button-->
+<!--old get chips button 
+<div class="row">
 	<div class="col-sm-4">
 		<form action="/" method="post">
 			<div class="form-check">
-				<button type="submit" value="1" name="AddChips"class="btn btn-outline-dark btn-lg">sell hobbs for coin</button>
+				<button type="submit" value="1" name="AddChips"class="btn btn-outline-dark btn-lg">sell evander's scalp
+				for coin</button>
 			</div>
 		</form>
 	</div>
 </div>
-  
+ -->
   
    <p>{{ held }}</p>
     <p>{{ total_value }}</p>
@@ -78,6 +82,54 @@
 	</div>
 </footer>
 
+<footer class="footer p-5">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid">
+			<button name="hit" class="jit btn btn-outline-dark btn-lg">hit</button>
+			</div>
+			<div class="col-sm-6 d-grid">
+				<form action="/" method="post">
+					<div class="form-check d-grid">
+						<button type="submit" value="50" name="BetChips"class="btn btn-outline-dark btn-lg">Bet 50</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>	
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid">
+			<button name="hold" class="btn btn-outline-dark btn-lg">hold</button>
+			</div>
+			<div class="col-sm-6 d-grid">
+				<form action="/" method="post" class="d-grid">
+					<div class="form-check d-grid">
+						<button type="submit" value="100" name="BetChips100"class="btn btn-outline-dark btn-lg">Bet 100</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid"> <!-- get more coins -->
+				<form action="/" method="post"class="d-grid">
+					<div class="form-check d-grid">
+						<button type="submit" value="500" name="AddChips"class="btn btn-outline-dark btn-lg">Restart   </button>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-6 d-grid">
+				<form action="/" method="post">
+					<div class="form-check d-grid">
+						<button type="submit" value="100" name="BetChipsAll"class="btn btn-outline-dark btn-lg">All in ;)</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</footer>
 
 
 {% endblock %}

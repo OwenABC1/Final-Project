@@ -72,7 +72,8 @@ def home():
     if 'chips' not in session:
         session['chips'] = 0
     if "AddChips" in request.form:
-        session['chips'] = session['chips'] + 1 
+        session['chips'] = 500 
+        session['bet'] = 0
         print("chips: "+ str(session['chips']))
     #print("chips: "+ str(chips))
     
@@ -80,8 +81,28 @@ def home():
     if 'bet' not in session:
         session['bet'] = 0
     if "BetChips" in request.form:
-        session['bet'] = session['bet'] + 1 
-        session['chips'] = session['chips'] - 1 
+        session['bet'] = session['bet'] + 50 
+        session['chips'] = session['chips'] - 50 
+        print("chips: "+ str(session['chips']))
+        print("bet: "+ str(session['bet']))
+    #print("chips: "+ str(chips))
+    
+    if 'bet' not in session:
+        session['bet'] = 0
+    if "BetChips100" in request.form:
+        session['bet'] = session['bet'] + 100 
+        session['chips'] = session['chips'] - 100 
+        print("chips: "+ str(session['chips']))
+        print("bet: "+ str(session['bet']))
+    #print("chips: "+ str(chips))
+    
+    
+    
+    if 'bet' not in session:
+        session['bet'] = 0
+    if "BetChipsAll" in request.form:
+        session['bet'] = session['bet'] + session['chips'] 
+        session['chips'] = 0 
         print("chips: "+ str(session['chips']))
         print("bet: "+ str(session['bet']))
     #print("chips: "+ str(chips))
