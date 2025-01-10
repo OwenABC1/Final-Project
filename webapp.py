@@ -73,6 +73,7 @@ def home():
         session['chips'] = 0
     if "AddChips" in request.form:
         session['chips'] = 500 
+        session['bet'] = 0
         print("chips: "+ str(session['chips']))
     #print("chips: "+ str(chips))
     
