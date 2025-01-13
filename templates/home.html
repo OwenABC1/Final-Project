@@ -17,7 +17,6 @@
 
    <p class="jit">{{ held }}</p>
     <p class="jit">{{ total_value }}</p>
-	
 
 
 <footer class="footer p-5">
@@ -53,6 +52,54 @@
 	</div>
 </footer>
 
+<footer class="footer p-5">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid">
+			<button name="hit" class="jit btn btn-outline-dark btn-lg">hit</button>
+			</div>
+			<div class="col-sm-6 d-grid">
+				<form action="/" method="post">
+					<div class="form-check d-grid">
+						<button type="submit" value="50" name="BetChips"class="btn btn-outline-dark btn-lg">Bet 50</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>	
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid">
+			<button name="hold" class="btn btn-outline-dark btn-lg">hold</button>
+			</div>
+			<div class="col-sm-6 d-grid">
+				<form action="/" method="post" class="d-grid">
+					<div class="form-check d-grid">
+						<button type="submit" value="100" name="BetChips100"class="btn btn-outline-dark btn-lg">Bet 100</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 d-grid"> <!-- get more coins -->
+				<form action="/" method="post"class="d-grid">
+					<div class="form-check d-grid">
+						<button type="submit" value="500" name="AddChips"class="btn btn-outline-dark btn-lg">Restart   </button>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-6 d-grid">
+				<form action="/" method="post">
+					<div class="form-check d-grid">
+						<button type="submit" value="100" name="BetChipsAll"class="btn btn-outline-dark btn-lg">All in ;)</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</footer>
 
 
 {% endblock %}
