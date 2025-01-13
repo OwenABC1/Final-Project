@@ -1,3 +1,13 @@
 .jit{
-	  color: red;
+	  color: white;
+}
+body{
+ background-image: url("/static/blackjacktable.jpg");
+ background-size: cover;
+            /* Center the background image */
+            background-position: center;
+            /* Prevent background image from repeating */
+            background-repeat: no-repeat;
+            /* Attach the background image to the viewport (helps with scrollable pages) */
+            background-attachment: fixed;
 }
