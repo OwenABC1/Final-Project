@@ -80,7 +80,7 @@ def home():
     
     if 'bet' not in session:
         session['bet'] = 0
-    if "BetChips" in request.form:
+    if "BetChips" in request.form and session['chips'] > 0:
         session['bet'] = session['bet'] + 50 
         session['chips'] = session['chips'] - 50 
         print("chips: "+ str(session['chips']))
@@ -89,7 +89,7 @@ def home():
     
     if 'bet' not in session:
         session['bet'] = 0
-    if "BetChips100" in request.form:
+    if "BetChips100" in request.form and session['chips'] >= 100:
         session['bet'] = session['bet'] + 100 
         session['chips'] = session['chips'] - 100 
         print("chips: "+ str(session['chips']))
@@ -100,7 +100,7 @@ def home():
     
     if 'bet' not in session:
         session['bet'] = 0
-    if "BetChipsAll" in request.form:
+    if "BetChipsAll" in request.form and session['chips'] > 0:
         session['bet'] = session['bet'] + session['chips'] 
         session['chips'] = 0 
         print("chips: "+ str(session['chips']))
