@@ -5,12 +5,23 @@
 {% block title %}page1{% endblock %}
 
 {% block content %}
-  <h1>This is Page 1</h1>
 
-  <p>Lorem ipsum sit dolor amet.</p>
+<h1 class="jit"> Scoreboard <h1>
+<!--
+  <h2 class="jit">Top Highscores</h2>
+    {% if highscore_list %}
+        <ol>
+            {% for username, score in highscore_list %}
+                <li class="jit">{{ username }}: {{ score }} Chips</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p class="jit">No highscores available.</p>
+    {% endif %}
+-->
 
-  <pre>
-    {{ dump_user_data }}
-  </pre>
-
+{% for doc in documents|reverse %}
+	<h1 class="jit">User: {{doc.User}}</h1>
+	<h5 class="jit">Score: {{doc.Score}}</h5>
+{% endfor %}
 {% endblock %}
