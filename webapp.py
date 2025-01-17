@@ -71,7 +71,7 @@ def home():
         print("I see gthub token")
         if "PostHS" in request.form:  #option to submit score prompt with post HS form
             print("Tyring to submit hs")
-            newDict = {"USER":session['user_data']['login'],"Score":session['chips']}
+            newDict = {"USER":session['user_data']['login'],"Score":session['chips']+session['bet']}
             LastDoc = {}
             for doc in collection.find():
                 LastDoc = doc
