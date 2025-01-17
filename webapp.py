@@ -64,9 +64,28 @@ def inject_logged_in():
 
 @app.route('/', methods=["GET","POST"])
 def home():
-    
-    
-
+    highscores = ""
+    documents = []
+    # Get the user's highscore from the database
+    if 'github_token' in session:
+        print("I see gthub token")
+        if "PostHS" in request.form:  #option to submit score prompt with post HS form
+            print("Tyring to submit hs")
+            newDict = {"USER":session['user_data']['login'],"Score":session['chips']}
+            LastDoc = {}
+            for doc in collection.find():
+                LastDoc = doc
+            print(newDict)
+            print(LastDoc)   
+            if newDict["USER"] != LastDoc["USER"] and newDict["Score"] != LastDoc["Score"]:
+                collection.insert_one(newDict)
+                print(session["chips"])
+              
+    for c in collection.find():
+        highscores = highscores + Markup("User: "+c["USER"]+"Score: "+str(c["Score"]))
+        documents.append({"User": c["USER"], "Score": c["Score"]})
+    print(highscores)
+    print(documents)
     
     
     
@@ -132,7 +151,7 @@ def home():
     
     app.logger.info(f"Total value of cards in hand: {total}")
     
-    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'], bet=session['bet'])
+    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'], bet=session['bet'], highscores=highscores, documents=documents)
 
 
 #redirect to GitHub's OAuth page and confirm callback URL
@@ -193,19 +212,20 @@ def renderPage1():
     # Get the user's highscore from the database
     if 'github_token' in session:
         print("I see gthub token")
-        #if "PostHS" in session:  #option to submit score prompt with post HS form
-        newDict = {"USER":session['user_data']['login'],"Score":session['chips']}
-        LastDoc = {}
-        for doc in collection.find():
-           LastDoc = doc
-        print(newDict)
-        print(LastDoc)   
-        if newDict["USER"] != LastDoc["USER"] or newDict["Score"] != LastDoc["Score"]:
-           collection.insert_one(newDict)
-           print(session["chips"])
+        if "PostHS" in request.form:  #option to submit score prompt with post HS form
+            print("Tyring to submit hs")
+            newDict = {"USER":session['user_data']['login'],"Score":session['chips']}
+            LastDoc = {}
+            for doc in collection.find():
+                LastDoc = doc
+            print(newDict)
+            print(LastDoc)   
+            if newDict["USER"] != LastDoc["USER"] and newDict["Score"] != LastDoc["Score"]:
+                collection.insert_one(newDict)
+                print(session["chips"])
               
     for c in collection.find():
-        highscores = highscores + Markup("User: "+c["USER"]+"Score: "+c["Score"])
+        highscores = highscores + Markup("User: "+c["USER"]+"Score: "+str(c["Score"]))
         documents.append({"User": c["USER"], "Score": c["Score"]})
     print(highscores)
     print(documents)

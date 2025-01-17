@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<h1 class="jit"> Scoreboard <h1>
+<h1 class="jit slime crodie"> Scoreboard <h1>
 <!--
   <h2 class="jit">Top Highscores</h2>
     {% if highscore_list %}
@@ -20,8 +20,9 @@
     {% endif %}
 -->
 
-{% for doc in documents|reverse %}
-	<h1 class="jit">User: {{doc.User}}</h1>
-	<h5 class="jit">Score: {{doc.Score}}</h5>
+{% for doc in documents|sort(attribute='Score', reverse=true) %}
+	<h1 class="jit slime">User: {{doc.User}}</h1>
+	<h5 class="jit slime">Score: {{doc.Score}}</h5>
 {% endfor %}
+
 {% endblock %}

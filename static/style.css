@@ -1,6 +1,13 @@
 .jit{
 	  color: white;
 }
+.slime{
+	text-align:center;
+}
+.crodie{
+	font-size: 1750%;
+	text-shadow: 10px 10px 20px green;
+}
 body{
  background-image: url("/static/blackjacktable.jpg");
  background-size: cover;
