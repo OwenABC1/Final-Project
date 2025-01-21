@@ -117,6 +117,9 @@ def home():
     
     if 'chips' not in session:
         session['chips'] = 0
+    if 'bet' not in session:
+        session['bet'] = 0
+        print(session['bet'])
     
     if firstTime == 'false':
         firstTime = 'true'
@@ -220,7 +223,7 @@ def home():
             print("win")
     app.logger.info(f"Total value of cards in hand: {total}")
 
-    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'])
+    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'])
 @app.route("/sendDisplay")
 def SendDisplay():
    
