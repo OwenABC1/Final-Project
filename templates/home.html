@@ -16,12 +16,11 @@
 	<div class="col-sm-4">
 		<form action="/" method="post">
 			<div class="form-check">
-				<button type="submit" value="1" name="AddChips"class="btn btn-outline-light btn-lg">Get more Chips</button>
 				<button type="submit" value="1" name="ShowMove"class="btn btn-outline-light btn-lg">Confirm</button>
 				
 			</div>
 		</form>
-		<button id="Cards" data-url="{{ url_for('add_cards') }}" value="1" name="addCards" class="btn btn-outline-light btn-lg">Get more Cards</button>
+		
 		<button id="Restart" data-url="{{ url_for('restart') }}" value="1" name="Restart" class="btn btn-outline-light btn-lg">Restart</button>
 	</div>
 </div>
@@ -56,7 +55,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 d-grid">
-			<button name="hit" class="jit btn btn-outline-light btn-lg">hit</button>
+			<button id="Cards" data-url="{{ url_for('add_cards') }}" value="1" name="addCards" class="btn btn-outline-light btn-lg">hit</button>
 			</div>
 			<div class="col-sm-6 d-grid">
 				<form action="/" method="post">
