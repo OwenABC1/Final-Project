@@ -1,12 +1,21 @@
 .jit{
-	  color: white;
+	  color:white;
+	  font-family:"verdana";
 }
 .slime{
 	text-align:center;
+	font-size:100%;
 }
 .crodie{
 	font-size: 1750%;
 	text-shadow: 10px 10px 20px green;
+}
+.choner{
+	text-align:center;
+	font-size: 250%;
+}
+.boldy{
+	font-family:"copperplate", Fantasy;
 }
 body{
  background-image: url("/static/blackjacktable.jpg");

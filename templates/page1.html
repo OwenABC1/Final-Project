@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<h1 class="jit slime crodie"> Scoreboard <h1>
+<h1 class="jit slime crodie boldy"> Scoreboard <h1>
 <!--
   <h2 class="jit">Top Highscores</h2>
     {% if highscore_list %}
@@ -19,10 +19,26 @@
         <p class="jit">No highscores available.</p>
     {% endif %}
 -->
-
-{% for doc in documents|sort(attribute='Score', reverse=true) %}
-	<h1 class="jit slime">User: {{doc.User}}</h1>
-	<h5 class="jit slime">Score: {{doc.Score}}</h5>
-{% endfor %}
-
+<div class="container-fluid mt-3">
+	<div class="row">
+		<div class="col-1">
+		</div>
+		<div class="col-5">
+			<h1 class="jit choner boldy">Player :</h1>
+			{% for doc in documents|sort(attribute='Score', reverse=true) %}
+				<h1 class="jit slime">{{doc.User}}</h1>
+			{% endfor %}
+		</div>
+		
+	
+		<div class="col-5">
+			<h1 class="jit choner boldy">Score :</h1>
+			{% for doc in documents|sort(attribute='Score', reverse=true) %}
+				<h1 class="jit slime">{{doc.Score}}</h1>
+			{% endfor %}
+		</div>
+		<div class="col-1">
+		</div>
+	</div>
+</div>
 {% endblock %}
