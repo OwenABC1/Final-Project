@@ -13,14 +13,19 @@
 		<form action="/" method="post">
 			<div class="form-check">
 				<button type="submit" value="1" name="AddChips"class="btn btn-outline-dark btn-lg">Get more Chips</button>
+				<button type="submit" value="1" name="ShowMove"class="btn btn-outline-dark btn-lg">Confirm</button>
+				
 			</div>
 		</form>
+		<button id="Cards" data-url="{{ url_for('add_cards') }}" value="1" name="addCards" class="btn btn-outline-dark btn-lg">Get more Cards</button>
+		<button id="Restart" data-url="{{ url_for('restart') }}" value="1" name="Restart" class="btn btn-outline-dark btn-lg">Restart</button>
 	</div>
 </div>
   
   
    <p>{{ held }}</p>
     <p>{{ total_value }}</p>
+	<p id="foo" class="hide">Lose</p>
 
 
 

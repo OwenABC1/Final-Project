@@ -60,41 +60,127 @@ def inject_logged_in():
     return {"logged_in":('github_token' in session)}
     
 
+AddedCards = 0
+gamestage = 0
+deck = pydealer.Deck()
+hand = pydealer.Stack() 
+firstTime = 'false'
+display = 'false'
+foo_hidden = False  
 
+@app.route('/add_cards', methods=['POST'])
+def add_cards():
+    global AddedCards
+    global gamestage
+    global deck
+    global hand
+    global display
+    
+    if AddedCards < 5:  # Only add cards if less than 2 cards have been added
+        AddedCards += 1
+        dealt = deck.deal(1)
+        hand.add(dealt)
+    
+    gamestage = 1
+  
+    return jsonify({'AddedCards': AddedCards})
+
+    
+@app.route('/restart', methods=['POST'])
+def restart():
+    global gamestage
+    global AddedCards
+    global deck
+    global hand
+    global display
+    gamestage = 0
+    if gamestage == 0:
+        AddedCards = 0 
+        deck = pydealer.Deck()
+        hand = pydealer.Stack()
+        deck.shuffle()
+        display = 'false'
+     
+      
+    return jsonify({'gamestage': gamestage})
+    
 @app.route('/', methods=["GET","POST"])
 def home():
-
+    global AddedCards
+    global gamestage
+    global hand
+    global deck
+    global firstTime
+    global display
+    
     if 'chips' not in session:
         session['chips'] = 0
+    
+    if firstTime == 'false':
+        firstTime = 'true'
+        deck.shuffle()
+    
     if "AddChips" in request.form:
         session['chips'] = session['chips'] + 1 
         print("chips: "+ str(session['chips']))
-    #print("chips: "+ str(chips))
+    
+    if not hand:  # Only initialize hand if it's empty
+        hand = pydealer.Stack()
+        
+    total = 0
+    num_aces = 0
     
 
-    deck = pydealer.Deck()
-    deck.shuffle()
-    hand = pydealer.Stack()
-    dealt = deck.deal(1)
-    hand.add(dealt)
-    
-    total = 0
     for card in hand:
         if card.value.isdigit():
             card_value = int(card.value)
         elif card.value in ['Jack', 'Queen', 'King']:
             card_value = 10
         elif card.value == 'Ace':
-            card_value = 11  # You might want to handle Ace as 1 or 11 based on your game rules
+            card_value = 11
+            num_aces += 1
         else:
             card_value = 0  # Default case, should not happen with standard cards
+        
         total += card_value
-    for card in hand:
-        if total > 21 and card_value == 'Ace':
-            card_value = 11
-    
+
+        # Adjust for Aces
+        while total > 21 and num_aces > 0:
+            total -= 10
+            num_aces -= 1
+            
+        if total > 21:
+            display = 'true'
+            SendDisplay()
+            print(display)
+            
+        if total == 21:
+            print("win")
     app.logger.info(f"Total value of cards in hand: {total}")
-    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'])
+    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'])
+@app.route("/sendDisplay")
+def SendDisplay():
+   
+   
+    global display
+    
+
+
+    return jsonify({'display': display})
+    
+
+
+@app.route('/getFooState', methods=['GET'])
+def get_foo_state():
+    global foo_hidden
+    return jsonify({'fooHidden': foo_hidden})
+
+
+@app.route('/setFooState', methods=['POST'])
+def set_foo_state():
+    global foo_hidden
+    foo_hidden = request.json.get('fooHidden', False)
+    return jsonify({'success': True})
 
 
 #redirect to GitHub's OAuth page and confirm callback URL
