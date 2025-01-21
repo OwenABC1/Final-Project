@@ -41,6 +41,7 @@ url = os.environ["MONGO_CONNECTION_STRING"]
 client = pymongo.MongoClient(url)
 db = client[os.environ["MONGO_DBNAME"]]
 collection = db['FinalProject'] #TODO: put the name of the collection here
+#print(db.list_collection_names())
 
 # Send a ping to confirm a successful connection
 try:
@@ -106,6 +107,7 @@ def restart():
     
 @app.route('/', methods=["GET","POST"])
 def home():
+
     global AddedCards
     global gamestage
     global hand
@@ -120,8 +122,38 @@ def home():
         firstTime = 'true'
         deck.shuffle()
     
+
+    highscores = ""
+    documents = []
+    # Get the user's highscore from the database
+    if 'github_token' in session:
+        print("I see gthub token")
+        if "PostHS" in request.form:  #option to submit score prompt with post HS form
+            print("Tyring to submit hs")
+            newDict = {"USER":session['user_data']['login'],"Score":session['chips']+session['bet']}
+            LastDoc = {}
+            for doc in collection.find():
+                LastDoc = doc
+            print(newDict)
+            print(LastDoc)   
+            if newDict["USER"] != LastDoc["USER"] and newDict["Score"] != LastDoc["Score"]:
+                collection.insert_one(newDict)
+                print(session["chips"])
+              
+    for c in collection.find():
+        highscores = highscores + Markup("User: "+c["USER"]+"Score: "+str(c["Score"]))
+        documents.append({"User": c["USER"], "Score": c["Score"]})
+    print(highscores)
+    print(documents)
+    
+    
+    
+    if 'chips' not in session:
+        session['chips'] = 500
+
     if "AddChips" in request.form:
-        session['chips'] = session['chips'] + 1 
+        session['chips'] = 500 
+        session['bet'] = 0
         print("chips: "+ str(session['chips']))
     
     if not hand:  # Only initialize hand if it's empty
@@ -129,6 +161,36 @@ def home():
         
     total = 0
     num_aces = 0
+    
+    
+    if 'bet' not in session:
+        session['bet'] = 0
+    if "BetChips" in request.form and session['chips'] > 0:
+        session['bet'] = session['bet'] + 50 
+        session['chips'] = session['chips'] - 50 
+        print("chips: "+ str(session['chips']))
+        print("bet: "+ str(session['bet']))
+    #print("chips: "+ str(chips))
+    
+    if 'bet' not in session:
+        session['bet'] = 0
+    if "BetChips100" in request.form and session['chips'] >= 100:
+        session['bet'] = session['bet'] + 100 
+        session['chips'] = session['chips'] - 100 
+        print("chips: "+ str(session['chips']))
+        print("bet: "+ str(session['bet']))
+    #print("chips: "+ str(chips))
+    
+    
+    
+    if 'bet' not in session:
+        session['bet'] = 0
+    if "BetChipsAll" in request.form and session['chips'] > 0:
+        session['bet'] = session['bet'] + session['chips'] 
+        session['chips'] = 0 
+        print("chips: "+ str(session['chips']))
+        print("bet: "+ str(session['bet']))
+    #print("chips: "+ str(chips))
     
 
     for card in hand:
@@ -157,6 +219,7 @@ def home():
         if total == 21:
             print("win")
     app.logger.info(f"Total value of cards in hand: {total}")
+
     return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'])
 @app.route("/sendDisplay")
 def SendDisplay():
@@ -181,6 +244,10 @@ def set_foo_state():
     global foo_hidden
     foo_hidden = request.json.get('fooHidden', False)
     return jsonify({'success': True})
+
+    
+    return render_template('home.html', held=dealt, total_value=total, chips=session['chips'], bet=session['bet'], highscores=highscores, documents=documents)
+
 
 
 #redirect to GitHub's OAuth page and confirm callback URL
@@ -210,21 +277,83 @@ def authorized():
             print(inst)
             flash('Unable to login, please try again.', 'error')
     return redirect('/')
+#@app.route('/post_highscore', methods=['POST'])
+#def post_highscore():
+#    if 'github_user_id' in session:
+  #      highscore = session.get('chips')
+#
+ #       # Check if the user already has a highscore, and update it if it's higher
+#        existing_user = collection.find_one({'github_user_id': session['github_user_id']})
+#
+ #       if existing_user:
+  #          if existing_user['highscore'] < highscore:
+  #              collection.update_one(
+  #                  {'github_user_id': session['github_user_id']},
+  #                  {'$set': {'highscore': highscore}}
+  #              )
+ #       else:
+  #          collection.insert_one({
+  #              'github_user_id': session['github_user_id'],
+  #              'highscore': highscore
+  #          })
+#
+  #      return redirect(url_for('home'))
+ #   else:
+  #      return redirect(url_for('login'))
 
-
-@app.route('/page1')
+@app.route('/page1', methods=["GET","POST"])
 def renderPage1():
-    if 'user_data' in session:
-        user_data_pprint = pprint.pformat(session['user_data'])#format the user data nicely
-    else:
-        user_data_pprint = '';
-    return render_template('page1.html',dump_user_data=user_data_pprint)
+    highscores = ""
+    documents = []
+    # Get the user's highscore from the database
+    if 'github_token' in session:
+        print("I see gthub token")
+        if "PostHS" in request.form:  #option to submit score prompt with post HS form
+            print("Tyring to submit hs")
+            newDict = {"USER":session['user_data']['login'],"Score":session['chips']}
+            LastDoc = {}
+            for doc in collection.find():
+                LastDoc = doc
+            print(newDict)
+            print(LastDoc)   
+            if newDict["USER"] != LastDoc["USER"] and newDict["Score"] != LastDoc["Score"]:
+                collection.insert_one(newDict)
+                print(session["chips"])
+              
+    for c in collection.find():
+        highscores = highscores + Markup("User: "+c["USER"]+"Score: "+str(c["Score"]))
+        documents.append({"User": c["USER"], "Score": c["Score"]})
+    print(highscores)
+    print(documents)
+    return render_template('page1.html', highscores=highscores, documents=documents)
+               
+               
+       
+            #highscores = collection.find().sort('highscore', pymongo.DESCENDING)
+          #  highscore_list = []
+           # for user in highscores:
+          #      username = user.get('github_user_id') 
+           #     highscore = user.get('highscore', 0)
+           #     highscore_list.append((username, highscore))
+           # if highscore:
+           #     chips = highscore.get('highscore', 0)
+          #  else:
+         #       chips = 0
+      #  else:
+       #    chips = 0
+     
+    
 
-@app.route('/page2')
-def renderPage2():
-    return render_template('page2.html')
+#    highscore_list = []
+#    for user in highscores:
+#        username = user.get('github_user_id') 
+#        highscore = user.get('highscore', 0)
+#        highscore_list.append((username, highscore))
+    
+   # return render_template('page1.html', highscore_list=highscore_list)
 
-#the tokengetter is automatically called to check who is logged in.
+
+#the tokengetter is automatically called to check who is logged in
 @github.tokengetter
 def get_github_oauth_token():
     return session['github_token']

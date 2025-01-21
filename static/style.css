@@ -1,3 +1,35 @@
+
 .hide {
 	display:none;
 }
+
+.jit{
+	  color:white;
+	  font-family:"verdana";
+}
+.slime{
+	text-align:center;
+	font-size:100%;
+}
+.crodie{
+	font-size: 1750%;
+	text-shadow: 10px 10px 20px green;
+}
+.choner{
+	text-align:center;
+	font-size: 250%;
+}
+.boldy{
+	font-family:"copperplate", Fantasy;
+}
+body{
+ background-image: url("/static/blackjacktable.jpg");
+ background-size: cover;
+            /* Center the background image */
+            background-position: center;
+            /* Prevent background image from repeating */
+            background-repeat: no-repeat;
+            /* Attach the background image to the viewport (helps with scrollable pages) */
+            background-attachment: fixed;
+}
+
