@@ -21,7 +21,7 @@
 			</div>
 		</form>
 		
-		<button id="Restart" data-url="{{ url_for('restart') }}" value="1" name="Restart" class="btn btn-outline-light btn-lg">Restart</button>
+		<!--<button id="Restart" data-url="{{ url_for('restart') }}" value="1" name="Restart" class="btn btn-outline-light btn-lg">Restart</button>-->
 	</div>
 </div>
   
@@ -80,12 +80,12 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6 d-grid"> <!-- get more coins -->
-				<form action="/" method="post"class="d-grid">
-					<div class="form-check d-grid">
-						<button type="submit" value="500" name="AddChips"class="btn btn-outline-light btn-lg">Restart   </button>
-					</div>
-				</form>
+			<div class="col-sm-6 d-grid"> <!-- restart -->
+				
+					
+						<button id="Restart" data-url="{{ url_for('restart') }}" value="1" name="Restart" class="btn btn-outline-light btn-lg">Restart</button>
+					
+				
 			</div>
 			<div class="col-sm-6 d-grid">
 				<form action="/" method="post">

@@ -101,6 +101,10 @@ def restart():
         hand = pydealer.Stack()
         deck.shuffle()
         display = 'false'
+        
+    session['chips'] = 500 
+    session['bet'] = 0
+    print("chips: "+ str(session['chips']))
      
       
     return jsonify({'gamestage': gamestage})
