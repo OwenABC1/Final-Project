@@ -218,6 +218,8 @@ def home():
             display = 'true'
             SendDisplay()
             print(display)
+            session['bet'] = 0
+            print("BUUUUUUUST")
             
         if total == 21:
             print("win")
