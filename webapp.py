@@ -220,9 +220,19 @@ def home():
             display = 'true'
             SendDisplay()
             print(display)
+            session['bet'] = 0
+            print("BUUUUUUUST")
             
         if total == 21:
+
             win = 'Win'
+
+            print("win")
+            session['chips'] = session['chips'] + 2*(int(session['bet']))
+            session['bet'] = 0
+            print(session['bet'])
+            print(session['chips'])
+
     app.logger.info(f"Total value of cards in hand: {total}")
 
     return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'], win=win)
