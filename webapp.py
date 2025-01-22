@@ -68,6 +68,7 @@ hand = pydealer.Stack()
 firstTime = 'false'
 display = 'false'
 foo_hidden = False  
+win = ""
 
 @app.route('/add_cards', methods=['POST'])
 def add_cards():
@@ -101,6 +102,10 @@ def restart():
         hand = pydealer.Stack()
         deck.shuffle()
         display = 'false'
+        
+    session['chips'] = 500 
+    session['bet'] = 0
+    print("chips: "+ str(session['chips']))
      
       
     return jsonify({'gamestage': gamestage})
@@ -114,6 +119,7 @@ def home():
     global deck
     global firstTime
     global display
+    global win
     
     if 'chips' not in session:
         session['chips'] = 0
@@ -218,12 +224,22 @@ def home():
             display = 'true'
             SendDisplay()
             print(display)
+            session['bet'] = 0
+            print("BUUUUUUUST")
             
         if total == 21:
+
+            win = 'Win'
+
             print("win")
+            session['chips'] = session['chips'] + 2*(int(session['bet']))
+            session['bet'] = 0
+            print(session['bet'])
+            print(session['chips'])
+
     app.logger.info(f"Total value of cards in hand: {total}")
 
-    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'])
+    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'], win=win)
 @app.route("/sendDisplay")
 def SendDisplay():
    
