@@ -68,6 +68,7 @@ hand = pydealer.Stack()
 firstTime = 'false'
 display = 'false'
 foo_hidden = False  
+win = ""
 
 @app.route('/add_cards', methods=['POST'])
 def add_cards():
@@ -114,6 +115,7 @@ def home():
     global deck
     global firstTime
     global display
+    global win
     
     if 'chips' not in session:
         session['chips'] = 0
@@ -220,10 +222,10 @@ def home():
             print(display)
             
         if total == 21:
-            print("win")
+            win = 'Win'
     app.logger.info(f"Total value of cards in hand: {total}")
 
-    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'])
+    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'], win=win)
 @app.route("/sendDisplay")
 def SendDisplay():
    
