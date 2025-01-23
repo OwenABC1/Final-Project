@@ -12,31 +12,29 @@
 <!--
 <p>money: {{chips}}</p>
 -->
-<div class="row"> <!--bottom row with chips not in play -->
+
+<!-- <div class="row">
 	<div class="col-sm-4">
 		<form action="/" method="post">
 			<div class="form-check">
 				<button type="submit" value="1" name="ShowMove"class="btn btn-outline-light btn-lg">Confirm</button>
-				
 			</div>
 		</form>
 		
-		<!--<button id="Restart" data-url="{{ url_for('restart') }}" value="1" name="Restart" class="btn btn-outline-light btn-lg">Restart</button>-->
-	</div>
+		</div>
 </div>
   
-  
 
 
-<!-- Latest compiled JavaScript -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <form action="/" method="POST" class="">
 	<div class="form-check">
-		<button type="submit" name="PostHS"class="btn btn-outline-light btn-lg"  value="true">Submit Score</button>
+		<button type="submit" name="PostHS"class="btn btn-outline-light btn-lg"  value="true">Submit Highscore</button>
 	</div>
 </form>
-
+-->
 
 
 <p class="jit">bet this round: {{bet}}</p>
@@ -51,10 +49,41 @@
 
 
 <footer class="footer p-5">
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-1 d-grid">
+			</div>
+			
+			<div class="col-sm-4 d-grid">
+				<form action="/" method="post">
+					<div class="yus form-check d-grid">
+						<button type="submit" value="1" name="ShowMove"class="btn btn-outline-light btn-lg">Confirm</button>
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-sm-2 d-grid">
+			</div>
+			
+			<div class="col-sm-4 d-grid">
+				<form action="/" method="POST" class="">
+					<div class="yus form-check d-grid">
+						<button type="submit" name="PostHS"class="btn btn-outline-light btn-lg"  value="true">Submit Highscore</button>
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-sm-1 d-grid">
+			</div>
+			
+		</div>
+	</div>	
+	
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 d-grid">
-			<button id="Cards" data-url="{{ url_for('add_cards') }}" value="1" name="addCards" class="btn btn-outline-light btn-lg">hit</button>
+				<button id="Cards" data-url="{{ url_for('add_cards') }}" value="1" name="addCards" class="btn btn-outline-light btn-lg">hit</button>
 			</div>
 			<div class="col-sm-6 d-grid">
 				<form action="/" method="post">
@@ -69,7 +98,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 d-grid">
+			
 				<button class="btn btn-outline-light btn-lg" data-url="{{url_for('heldbutton')}}" name="Hold" value="1" id="Hold" >Hold</button>
+				
 			</div>
 			<div class="col-sm-6 d-grid">
 				<form action="/" method="post" class="d-grid">
