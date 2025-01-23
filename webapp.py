@@ -11,6 +11,7 @@ import time
 import pymongo
 import sys
 import pydealer
+import random
 from pydealer import Card, Deck, Stack
 
  
@@ -60,7 +61,7 @@ except Exception as e:
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}
     
-
+DealerTotal = 0
 AddedCards = 0
 gamestage = 0
 deck = pydealer.Deck()
@@ -69,14 +70,16 @@ firstTime = 'false'
 display = 'false'
 foo_hidden = False  
 win = ""
+total = 0
 
-@app.route('/add_cards', methods=['POST'])
+@app.route('/add_cards', methods=['POST']) #hit button
 def add_cards():
     global AddedCards
     global gamestage
     global deck
     global hand
     global display
+    global DealerTotal
     
     if AddedCards < 5:  # Only add cards if less than 2 cards have been added
         AddedCards += 1
@@ -84,8 +87,9 @@ def add_cards():
         hand.add(dealt)
     
     gamestage = 1
-  
-    return jsonify({'AddedCards': AddedCards})
+    
+    
+    return jsonify({'AddedCards': AddedCards}, DealerTotal=DealerTotal)
 
     
 @app.route('/restart', methods=['POST'])
@@ -110,9 +114,64 @@ def restart():
       
     return jsonify({'gamestage': gamestage})
     
+@app.route('/hold', methods=['POST'])
+def heldbutton():
+    global total
+    global DealerTotal
+    DealerPossible = [16,17,18,19,20,21,22,23,24,25,26]
+    DealerTotal = random.choice(DealerPossible)
+    print("Dealer: " + str(DealerTotal))
+    
+    if total > 1:
+        print("player: " + str(total))
+    
+    if total == DealerTotal or total >= 21 and int(DealerTotal) >= 21:
+        print("DRAW")
+        
+    if total <= 21 and total > int(DealerTotal):
+        win = 'Win'
+        print('You Win!')
+        session['chips'] = session['chips'] + 2*(int(session['bet']))
+        session['bet'] = 0
+        
+    if total <= 21 and total < int(DealerTotal) and int(DealerTotal) > 21:
+        win = 'Win'
+        print('You Win!')
+        session['chips'] = session['chips'] + 2*(int(session['bet']))
+        session['bet'] = 0
+        
+    if total >= 21 and int(DealerTotal) <= 21:
+        #lose 
+        print("You lose")
+        session['bet'] = 0
+        
+    if total <= 21 and total < int(DealerTotal) and int(DealerTotal) <= 21:
+        #lose
+        print('You lose')
+        session['bet'] = 0
+    
+    global gamestage
+    global AddedCards
+    global deck
+    global hand
+    global display
+    gamestage = 0
+    if gamestage == 0:
+        AddedCards = 0 
+        deck = pydealer.Deck()
+        hand = pydealer.Stack()
+        deck.shuffle()
+        display = 'false'
+        
+  
+
+    return jsonify({'DealerTotal':DealerTotal, 'gamestage': gamestage})
+    
+
+    
 @app.route('/', methods=["GET","POST"])
 def home():
-
+    global total
     global AddedCards
     global gamestage
     global hand
@@ -224,7 +283,7 @@ def home():
             display = 'true'
             SendDisplay()
             print(display)
-            session['bet'] = 0
+            #session['bet'] = 0
             print("BUUUUUUUST")
             
         if total == 21:
@@ -232,11 +291,24 @@ def home():
             win = 'Win'
 
             print("win")
-            session['chips'] = session['chips'] + 2*(int(session['bet']))
-            session['bet'] = 0
+            #session['chips'] = session['chips'] + 2*(int(session['bet']))
+            #session['bet'] = 0
             print(session['bet'])
             print(session['chips'])
-
+        '''
+        if total < 21 and total > int(session['Dealer']):
+        
+            win = 'Win'
+            print('You Win!')
+            session['chips'] = session['chips'] + 2*(int(session['bet']))
+            session['bet'] = 0
+        if total < 21 and total < int(session['Dealer']) and int(session['Dealer']) < 21:
+            win = 'Win'
+            print('You Win!')
+            session['chips'] = session['chips'] + 2*(int(session['bet']))
+            session['bet'] = 0
+        if total > 21 and 
+        '''
     app.logger.info(f"Total value of cards in hand: {total}")
 
     return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'], win=win)

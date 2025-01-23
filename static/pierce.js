@@ -49,6 +49,19 @@ $(document).ready(function(){
             }
         });
     });
+	
+	
+	$("#Hold").click(function() {
+        $.ajax({
+            url: $(this).data('url'),
+            method: 'POST',
+            success: function(response) {
+                console.log('DealerTotal:', response.DealerTotal);
+            }
+        });
+    });
+	
+	
 
     $("#Restart").click(function() {
         appState.display = 'false';
