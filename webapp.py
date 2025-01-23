@@ -70,6 +70,9 @@ firstTime = 'false'
 display = 'false'
 foo_hidden = False  
 win = ""
+lose = ""
+draw = ""
+STATUS = "Start"
 total = 0
 
 @app.route('/add_cards', methods=['POST']) #hit button
@@ -94,6 +97,8 @@ def add_cards():
     
 @app.route('/restart', methods=['POST'])
 def restart():
+    global DealerTotal
+    DealerTotal = 0
     global gamestage
     global AddedCards
     global deck
@@ -116,7 +121,11 @@ def restart():
     
 @app.route('/hold', methods=['POST'])
 def heldbutton():
+    global win
+    global lose
+    global draw
     global total
+    global STATUS
     global DealerTotal
     DealerPossible = [16,17,18,19,20,21,22,23,24,25,26]
     DealerTotal = random.choice(DealerPossible)
@@ -124,29 +133,35 @@ def heldbutton():
     
     if total > 1:
         print("player: " + str(total))
-    
+        
     if total == DealerTotal or total >= 21 and int(DealerTotal) >= 21:
         print("DRAW")
+        draw = 'Draw'
+        STATUS = 'Draw'
         
     if total <= 21 and total > int(DealerTotal):
         win = 'Win'
+        STATUS = 'Win'
         print('You Win!')
         session['chips'] = session['chips'] + 2*(int(session['bet']))
         session['bet'] = 0
         
     if total <= 21 and total < int(DealerTotal) and int(DealerTotal) > 21:
         win = 'Win'
+        STATUS = 'Win'
         print('You Win!')
         session['chips'] = session['chips'] + 2*(int(session['bet']))
         session['bet'] = 0
         
     if total >= 21 and int(DealerTotal) <= 21:
         #lose 
+        STATUS = 'Lose'
         print("You lose")
         session['bet'] = 0
         
     if total <= 21 and total < int(DealerTotal) and int(DealerTotal) <= 21:
         #lose
+        STATUS = 'Lose'
         print('You lose')
         session['bet'] = 0
     
@@ -165,7 +180,7 @@ def heldbutton():
         
   
 
-    return jsonify({'DealerTotal':DealerTotal, 'gamestage': gamestage})
+    return jsonify({'DealerTotal':DealerTotal, 'gamestage': gamestage, STATUS: "STATUS"})
     
 
     
@@ -311,7 +326,7 @@ def home():
         '''
     app.logger.info(f"Total value of cards in hand: {total}")
 
-    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'], win=win)
+    return render_template('home.html', held=hand, total_value=total,display=display,chips=session['chips'], bet=session['bet'], win=win, STATUS=STATUS, DealerTotal=DealerTotal)
 @app.route("/sendDisplay")
 def SendDisplay():
    
@@ -344,7 +359,7 @@ def set_foo_state():
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
 def login():   
-    return github.authorize(callback=url_for('authorized', _external=True, _scheme='http')) #callback URL must match the pre-configured callback URL
+    return github.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
 @app.route('/logout')
 def logout():
